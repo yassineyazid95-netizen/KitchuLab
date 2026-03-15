@@ -1,0 +1,248 @@
+{% comment %}
+  KitchuLab — Hero Banner Section
+  Full-width hero with overlay, heading, subheading, and CTA buttons
+{% endcomment %}
+
+<section
+  class="hero-banner"
+  style="min-height: {{ section.settings.min_height }}px;"
+  aria-labelledby="hero-heading-{{ section.id }}"
+>
+  {%- if section.settings.image != blank -%}
+    <div class="hero-banner__media">
+      <img
+        src="{{ section.settings.image | img_url: '2000x' }}"
+        srcset="
+          {{ section.settings.image | img_url: '750x' }} 750w,
+          {{ section.settings.image | img_url: '1100x' }} 1100w,
+          {{ section.settings.image | img_url: '1500x' }} 1500w,
+          {{ section.settings.image | img_url: '2000x' }} 2000w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+        loading="eager"
+        fetchpriority="high"
+        width="2000"
+        height="{{ 2000 | divided_by: section.settings.image.aspect_ratio | round }}"
+      >
+    </div>
+  {%- else -%}
+    <div class="hero-banner__media" style="background: linear-gradient(135deg, #1B2A3B 0%, #243447 50%, #1B2A3B 100%);">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:5%;">
+        <svg width="380" height="380" viewBox="0 0 380 380" fill="none" opacity="0.06">
+          <circle cx="190" cy="190" r="180" stroke="#E87722" stroke-width="4"/>
+          <circle cx="190" cy="190" r="140" stroke="#E87722" stroke-width="2"/>
+          <path d="M130 150 L190 90 L250 150 L250 250 L130 250 Z" stroke="white" stroke-width="3" fill="none"/>
+          <path d="M155 190 L225 190" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
+          <path d="M155 210 L205 210" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
+          <path d="M155 170 L215 170" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div
+    class="hero-banner__overlay"
+    style="background: linear-gradient(
+      {{ section.settings.overlay_direction }}deg,
+      rgba({{ section.settings.overlay_color | color_extract: 'red' }}, {{ section.settings.overlay_color | color_extract: 'green' }}, {{ section.settings.overlay_color | color_extract: 'blue' }}, {{ section.settings.overlay_opacity | divided_by: 100.0 }}) 0%,
+      rgba({{ section.settings.overlay_color | color_extract: 'red' }}, {{ section.settings.overlay_color | color_extract: 'green' }}, {{ section.settings.overlay_color | color_extract: 'blue' }}, {{ section.settings.overlay_opacity | times: 0.55 | divided_by: 100.0 }}) 55%,
+      rgba({{ section.settings.overlay_color | color_extract: 'red' }}, {{ section.settings.overlay_color | color_extract: 'green' }}, {{ section.settings.overlay_color | color_extract: 'blue' }}, 0.1) 100%
+    );"
+  ></div>
+
+  <div class="container">
+    <div class="hero-banner__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="hero-banner__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1
+          class="hero-banner__title"
+          id="hero-heading-{{ section.id }}"
+          style="color: {{ section.settings.heading_color }};"
+        >
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p
+          class="hero-banner__subtitle"
+          style="color: {{ section.settings.subheading_color }};"
+        >
+          {{ section.settings.subheading }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank or section.settings.button_label_2 != blank -%}
+        <div class="hero-banner__actions">
+          {%- if section.settings.button_label != blank -%}
+            <a
+              href="{{ section.settings.button_link | default: '/collections/all' }}"
+              class="btn btn--primary btn--lg"
+            >
+              {{ section.settings.button_label | escape }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.button_label_2 != blank -%}
+            <a
+              href="{{ section.settings.button_link_2 | default: '/pages/about' }}"
+              class="btn btn--outline-white btn--lg"
+            >
+              {{ section.settings.button_label_2 | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.badge_text != blank -%}
+    <div class="hero-banner__badge" aria-label="{{ section.settings.badge_text }}">
+      {{ section.settings.badge_text }}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 300,
+      "max": 900,
+      "step": 50,
+      "default": 620,
+      "unit": "px",
+      "label": "Minimum banner height"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#1B2A3B"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 80,
+      "unit": "%",
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "select",
+      "id": "overlay_direction",
+      "label": "Overlay direction",
+      "options": [
+        { "value": "90", "label": "Left to right" },
+        { "value": "105", "label": "Diagonal" },
+        { "value": "0", "label": "Top to bottom" }
+      ],
+      "default": "105"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Professional Grade"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Tools Built for <em>Professional Chefs</em>"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Premium kitchen utensils and equipment trusted by restaurant professionals and passionate home cooks worldwide."
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Primary Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop All Products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Button label",
+      "default": "Our Story"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text (optional)",
+      "info": "Short text e.g. 'Free Shipping Today'"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero banner"
+    }
+  ]
+}
+{% endschema %}

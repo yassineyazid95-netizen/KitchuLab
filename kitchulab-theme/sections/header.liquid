@@ -1,0 +1,290 @@
+{% comment %}
+  KitchuLab — Header Section
+  Sticky dark navy header with mega-menu navigation
+{% endcomment %}
+
+<header class="site-header" id="site-header" role="banner">
+  <div class="container header-inner">
+
+    {%- comment -%} Hamburger (mobile) {%- endcomment -%}
+    <button
+      class="hamburger"
+      aria-label="{{ 'layout.navigation.menu' | t }}"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    {%- comment -%} Logo {%- endcomment -%}
+    <div class="header-logo">
+      <a href="/" aria-label="{{ shop.name }} — {{ 'general.meta.home' | t }}">
+        {%- if section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | img_url: '300x' }}"
+            alt="{{ shop.name }}"
+            class="header-logo__image"
+            width="150"
+            height="44"
+            loading="eager"
+          >
+        {%- else -%}
+          <span class="header-logo__text">
+            {%- assign shop_parts = shop.name | split: ' ' -%}
+            {%- if shop_parts.size > 1 -%}
+              {{ shop_parts | first }}<span>{{ shop_parts | last }}</span>
+            {%- else -%}
+              {{ shop.name }}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} Primary Navigation {%- endcomment -%}
+    <nav class="header-nav" role="navigation" aria-label="{{ 'layout.navigation.main_nav_label' | t }}">
+      <ul class="nav-list" role="list">
+
+        {%- comment -%} Kitchen Tools {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/kitchen-tools" aria-haspopup="true" aria-expanded="false">
+            {{ 'navigation.kitchen_tools' | t }}
+            <svg class="nav-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="mega-menu" role="region" aria-label="{{ 'navigation.kitchen_tools' | t }}">
+            <div class="mega-menu__inner">
+              <div>
+                <div class="mega-menu__column-title">{{ 'navigation.cookware' | t }}</div>
+                <ul class="mega-menu__list" role="list">
+                  <li><a href="/collections/pots-pans" class="mega-menu__link">{{ 'navigation.pots_and_pans' | t }}</a></li>
+                  <li><a href="/collections/cutting-boards" class="mega-menu__link">{{ 'navigation.cutting_boards' | t }}</a></li>
+                  <li><a href="/collections/knives" class="mega-menu__link">{{ 'navigation.knives' | t }}</a></li>
+                  <li><a href="/collections/kitchen-utensils" class="mega-menu__link">{{ 'navigation.kitchen_utensils' | t }}</a></li>
+                  <li><a href="/collections/thermometers" class="mega-menu__link">{{ 'navigation.thermometers' | t }}</a></li>
+                  <li><a href="/collections/baking" class="mega-menu__link">{{ 'navigation.baking' | t }}</a></li>
+                </ul>
+              </div>
+              <div>
+                <div class="mega-menu__column-title">{{ 'navigation.food_prep' | t }}</div>
+                <ul class="mega-menu__list" role="list">
+                  <li><a href="/collections/mixing-bowls" class="mega-menu__link">{{ 'navigation.mixing_bowls' | t }}</a></li>
+                  <li><a href="/collections/colanders" class="mega-menu__link">{{ 'navigation.colanders' | t }}</a></li>
+                  <li><a href="/collections/graters-peelers" class="mega-menu__link">{{ 'navigation.graters_peelers' | t }}</a></li>
+                  <li><a href="/collections/scales" class="mega-menu__link">{{ 'navigation.scales' | t }}</a></li>
+                  <li><a href="/collections/timers" class="mega-menu__link">{{ 'navigation.timers' | t }}</a></li>
+                  <li><a href="/collections/kitchen-tools" class="mega-menu__link">{{ 'navigation.view_all' | t }}</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu__featured">
+                <div class="mega-menu__featured-image">
+                  {%- if section.settings.mega_menu_1_image != blank -%}
+                    <img src="{{ section.settings.mega_menu_1_image | img_url: '400x300' }}" alt="{{ 'navigation.kitchen_tools' | t }}" loading="lazy">
+                  {%- else -%}
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#1B2A3B 0%,#243447 100%);display:flex;align-items:center;justify-content:center;">
+                      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><path d="M15 30h30M22 22l-7 8 7 8M38 22l7 8-7 8" stroke="#E87722" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                  {%- endif -%}
+                  <span class="mega-menu__featured-label">{{ 'navigation.shop_all' | t }} Kitchen Tools</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        {%- comment -%} Kitchen Appliances {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/kitchen-appliances">
+            {{ 'navigation.appliances' | t }}
+            <svg class="nav-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="/collections/blenders">{{ 'navigation.blenders' | t }}</a>
+            <a href="/collections/food-processors">{{ 'navigation.food_processors' | t }}</a>
+            <a href="/collections/mixers">{{ 'navigation.mixers' | t }}</a>
+            <a href="/collections/immersion-blenders">{{ 'navigation.immersion_blenders' | t }}</a>
+            <a href="/collections/slicers">{{ 'navigation.slicers' | t }}</a>
+            <a href="/collections/kitchen-appliances">{{ 'navigation.view_all' | t }}</a>
+          </div>
+        </li>
+
+        {%- comment -%} Tableware {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/tableware">
+            {{ 'navigation.tableware' | t }}
+            <svg class="nav-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="/collections/plates">{{ 'navigation.plates' | t }}</a>
+            <a href="/collections/bowls">{{ 'navigation.bowls' | t }}</a>
+            <a href="/collections/glassware">{{ 'navigation.glassware' | t }}</a>
+            <a href="/collections/cutlery">{{ 'navigation.cutlery' | t }}</a>
+            <a href="/collections/serving-dishes">{{ 'navigation.serving_dishes' | t }}</a>
+            <a href="/collections/tableware">{{ 'navigation.view_all' | t }}</a>
+          </div>
+        </li>
+
+        {%- comment -%} Bar Equipment {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/bar-equipment">
+            {{ 'navigation.bar_equipment' | t }}
+            <svg class="nav-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="/collections/cocktail-tools">{{ 'navigation.cocktail_tools' | t }}</a>
+            <a href="/collections/ice-makers">{{ 'navigation.ice_makers' | t }}</a>
+            <a href="/collections/drink-dispensers">{{ 'navigation.drink_dispensers' | t }}</a>
+            <a href="/collections/wine-accessories">{{ 'navigation.wine_accessories' | t }}</a>
+            <a href="/collections/bar-equipment">{{ 'navigation.view_all' | t }}</a>
+          </div>
+        </li>
+
+        {%- comment -%} Restaurant Equipment {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/restaurant-equipment">
+            {{ 'navigation.restaurant_equipment' | t }}
+            <svg class="nav-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="/collections/chafing-dishes">{{ 'navigation.chafing_dishes' | t }}</a>
+            <a href="/collections/food-warmers">{{ 'navigation.food_warmers' | t }}</a>
+            <a href="/collections/display-equipment">{{ 'navigation.display_equipment' | t }}</a>
+            <a href="/collections/storage-containers">{{ 'navigation.storage_containers' | t }}</a>
+            <a href="/collections/restaurant-equipment">{{ 'navigation.view_all' | t }}</a>
+          </div>
+        </li>
+
+        {%- comment -%} Sale {%- endcomment -%}
+        <li class="nav-item">
+          <a href="/collections/sale" style="color: #E87722;">
+            {{ 'navigation.sale' | t }}
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    {%- comment -%} Header Actions {%- endcomment -%}
+    <div class="header-actions">
+
+      {%- comment -%} Search {%- endcomment -%}
+      <button
+        class="header-action-btn"
+        data-search-toggle
+        aria-label="{{ 'general.search.search' | t }}"
+        aria-expanded="false"
+        aria-controls="search-overlay"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      {%- comment -%} Account {%- endcomment -%}
+      {%- if section.settings.show_account -%}
+        <a
+          href="{%- if customer -%}/account{%- else -%}/account/login{%- endif -%}"
+          class="header-action-btn"
+          aria-label="{%- if customer -%}{{ 'layout.customer.account' | t }}{%- else -%}{{ 'layout.customer.log_in' | t }}{%- endif -%}"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- comment -%} Wishlist {%- endcomment -%}
+      {%- if section.settings.show_wishlist -%}
+        <a
+          href="{{ section.settings.wishlist_url | default: '/pages/wishlist' }}"
+          class="header-action-btn"
+          aria-label="{{ 'layout.header.wishlist' | t }}"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- comment -%} Cart {%- endcomment -%}
+      <a
+        href="/cart"
+        class="header-action-btn"
+        aria-label="{{ 'layout.header.cart' | t }} ({{ cart.item_count }})"
+        data-cart-drawer
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="cart-count" data-cart-count data-count="{{ cart.item_count }}">{{ cart.item_count }}</span>
+      </a>
+
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 80,
+      "max": 250,
+      "step": 10,
+      "default": 150,
+      "unit": "px",
+      "label": "Logo max width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Main menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_menu_1_image",
+      "label": "Kitchen Tools mega menu image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "default": true,
+      "label": "Show account icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "default": true,
+      "label": "Show wishlist icon"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_url",
+      "label": "Wishlist page URL"
+    }
+  ]
+}
+{% endschema %}

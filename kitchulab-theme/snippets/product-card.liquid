@@ -1,0 +1,147 @@
+{% comment %}
+  KitchuLab — Product Card Snippet
+  Usage: {% render 'product-card', product: product %}
+
+  Parameters:
+    product: Shopify product object (required)
+    show_vendor: boolean (optional, default true)
+    lazy: boolean (optional, default true)
+{% endcomment %}
+
+{%- assign show_vendor = show_vendor | default: true -%}
+{%- assign lazy = lazy | default: true -%}
+{%- assign loading = lazy | ternary: 'lazy', 'eager' -%}
+
+{%- assign is_new = false -%}
+{%- assign days_new = 30 -%}
+{%- assign published_at = product.published_at | date: '%s' | times: 1 -%}
+{%- assign now = 'now' | date: '%s' | times: 1 -%}
+{%- assign seconds_new = days_new | times: 86400 -%}
+{%- if now | minus: published_at < seconds_new -%}
+  {%- assign is_new = true -%}
+{%- endif -%}
+
+{%- assign first_available_variant = product.selected_or_first_available_variant -%}
+{%- assign compare_price = first_available_variant.compare_at_price -%}
+{%- assign current_price = first_available_variant.price -%}
+{%- assign on_sale = false -%}
+{%- if compare_price > current_price -%}
+  {%- assign on_sale = true -%}
+{%- endif -%}
+
+<article
+  class="product-card"
+  aria-label="{{ product.title | escape }}"
+  data-product-id="{{ product.id }}"
+>
+  {%- comment -%} Image Wrapper {%- endcomment -%}
+  <div class="product-card__image-wrapper">
+    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      {%- if product.featured_image != blank -%}
+        <img
+          class="product-card__image"
+          src="{{ product.featured_image | img_url: '600x600', crop: 'center' }}"
+          srcset="
+            {{ product.featured_image | img_url: '300x300', crop: 'center' }} 300w,
+            {{ product.featured_image | img_url: '450x450', crop: 'center' }} 450w,
+            {{ product.featured_image | img_url: '600x600', crop: 'center' }} 600w
+          "
+          sizes="(max-width: 480px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          loading="{{ loading }}"
+          width="600"
+          height="600"
+        >
+      {%- else -%}
+        <div class="product-card__image-placeholder" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f3f4f6;">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true" style="color:#d1d5db;">
+            <rect x="8" y="8" width="48" height="48" rx="6" stroke="currentColor" stroke-width="2"/>
+            <circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 44l14-10 10 8 10-12 14 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} Badges {%- endcomment -%}
+    <div class="product-card__badges" aria-label="{{ 'products.product.badges' | t }}">
+      {%- unless product.available -%}
+        <span class="badge badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+      {%- else -%}
+        {%- if on_sale -%}
+          {%- assign save_amount = compare_price | minus: current_price -%}
+          {%- assign save_percent = save_amount | times: 100 | divided_by: compare_price -%}
+          <span class="badge badge--sale">{{ 'products.product.save' | t }} {{ save_percent }}%</span>
+        {%- endif -%}
+        {%- if is_new -%}
+          <span class="badge badge--new">{{ 'products.product.new' | t }}</span>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+
+    {%- comment -%} Wishlist button {%- endcomment -%}
+    <button
+      class="product-card__wishlist"
+      aria-label="{{ 'products.product.add_to_wishlist' | t }}: {{ product.title | escape }}"
+      type="button"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    {%- comment -%} Quick Add Button {%- endcomment -%}
+    {%- if product.available -%}
+      {%- if product.variants.size == 1 -%}
+        <button
+          class="product-card__quick-add"
+          data-quick-add
+          data-variant-id="{{ first_available_variant.id }}"
+          aria-label="{{ 'products.product.add_to_cart' | t }}: {{ product.title | escape }}"
+          type="button"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          {{ 'products.product.add_to_cart' | t }}
+        </button>
+      {%- else -%}
+        <a
+          href="{{ product.url }}"
+          class="product-card__quick-add"
+          aria-label="{{ 'products.product.choose_options' | t }}: {{ product.title | escape }}"
+        >
+          {{ 'products.product.choose_options' | t }}
+        </a>
+      {%- endif -%}
+    {%- else -%}
+      <span class="product-card__quick-add" style="background:#6b7280;cursor:not-allowed;" aria-disabled="true">
+        {{ 'products.product.sold_out' | t }}
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Product Info {%- endcomment -%}
+  <div class="product-card__info">
+    {%- if show_vendor and product.vendor != blank -%}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-card__price">
+      {%- if on_sale -%}
+        <span class="price price--sale">{{ current_price | money }}</span>
+        <span class="price price--compare">{{ compare_price | money }}</span>
+      {%- else -%}
+        {%- if product.price_varies -%}
+          <span class="price">{{ 'products.product.from_price_html' | t: price: product.price_min | money }}</span>
+        {%- else -%}
+          <span class="price">{{ current_price | money }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+</article>

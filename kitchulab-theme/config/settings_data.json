@@ -1,0 +1,61 @@
+{
+  "current": {
+    "color_primary": "#1B2A3B",
+    "color_accent": "#E87722",
+    "color_text": "#1a1a1a",
+    "color_background": "#ffffff",
+    "color_surface": "#f8f9fa",
+    "color_border": "#e5e7eb",
+    "font_heading": "inter_n7",
+    "font_body": "inter_n4",
+    "font_size_base": 16,
+    "logo_max_width": 150,
+    "header_sticky": true,
+    "header_transparent": false,
+    "show_vendor": true,
+    "show_quick_add": true,
+    "show_sale_badge": true,
+    "show_new_badge": true,
+    "days_new": 30,
+    "cart_type": "drawer",
+    "show_free_shipping_threshold": true,
+    "free_shipping_threshold": 9900,
+    "footer_tagline": "Professional kitchen equipment for chefs and home cooks. Quality tools that perform when it matters most.",
+    "show_payment_icons": true,
+    "social_facebook": "",
+    "social_instagram": "",
+    "social_twitter": "",
+    "social_youtube": "",
+    "social_linkedin": "",
+    "social_pinterest": "",
+    "social_tiktok": "",
+    "custom_css": "",
+    "custom_js": ""
+  },
+  "presets": {
+    "KitchuLab Default": {
+      "color_primary": "#1B2A3B",
+      "color_accent": "#E87722",
+      "color_text": "#1a1a1a",
+      "color_background": "#ffffff",
+      "color_surface": "#f8f9fa",
+      "color_border": "#e5e7eb"
+    },
+    "KitchuLab Dark": {
+      "color_primary": "#0a1628",
+      "color_accent": "#f59332",
+      "color_text": "#f3f4f6",
+      "color_background": "#111827",
+      "color_surface": "#1f2937",
+      "color_border": "#374151"
+    },
+    "KitchuLab Clean": {
+      "color_primary": "#1e293b",
+      "color_accent": "#3b82f6",
+      "color_text": "#1a1a1a",
+      "color_background": "#ffffff",
+      "color_surface": "#f1f5f9",
+      "color_border": "#e2e8f0"
+    }
+  }
+}

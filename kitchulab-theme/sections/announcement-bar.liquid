@@ -1,0 +1,78 @@
+{% comment %}
+  KitchuLab — Announcement Bar Section
+{% endcomment %}
+
+{%- if section.settings.show_announcement -%}
+  <div
+    class="announcement-bar"
+    style="background-color: {{ section.settings.background_color }};"
+    role="region"
+    aria-label="{{ 'sections.announcement_bar.announcement' | t }}"
+  >
+    <div class="container">
+      <p class="announcement-bar__text" style="color: {{ section.settings.text_color }};">
+        {%- if section.settings.link != blank -%}
+          <a href="{{ section.settings.link }}" style="color: inherit;">
+            {%- if section.settings.icon != blank -%}
+              {{ section.settings.icon }}&nbsp;&nbsp;
+            {%- endif -%}
+            {{ section.settings.text | escape }}
+          </a>
+        {%- else -%}
+          {%- if section.settings.icon != blank -%}
+            {{ section.settings.icon }}&nbsp;&nbsp;
+          {%- endif -%}
+          {{ section.settings.text | escape }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "default": true,
+      "label": "Show announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icon / Emoji (optional)",
+      "default": "🔥"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "default": "FREE SHIPPING on orders over $99 — Professional Kitchen Equipment",
+      "label": "Announcement text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Announcement link (optional)"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1B2A3B"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar"
+    }
+  ]
+}
+{% endschema %}

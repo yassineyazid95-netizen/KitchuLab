@@ -1,0 +1,149 @@
+{% comment %}
+  KitchuLab — Featured Collection Section
+  Shows a grid of products from a selected collection
+{% endcomment %}
+
+{%- assign collection = collections[section.settings.collection] -%}
+
+<section class="section featured-collection {% if section.settings.background == 'gray' %}section--gray{% endif %}" aria-labelledby="featured-collection-title-{{ section.id }}">
+  <div class="container">
+
+    <div class="section-header {% if section.settings.center_heading %}section-header--center{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="section-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+
+      <h2 class="section-title" id="featured-collection-title-{{ section.id }}">
+        {%- if section.settings.title != blank -%}
+          {{ section.settings.title | escape }}
+        {%- elsif collection != blank -%}
+          {{ collection.title }}
+        {%- else -%}
+          {{ 'sections.featured_collection.default_title' | t }}
+        {%- endif -%}
+      </h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="section-subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if collection != blank and collection.products_count > 0 -%}
+      <div class="product-grid">
+        {%- assign products_to_show = section.settings.products_to_show | default: 4 -%}
+        {%- for product in collection.products limit: products_to_show -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_view_all -%}
+        <div class="section-action">
+          <a
+            href="{{ collection.url }}"
+            class="btn btn--secondary btn--lg"
+            aria-label="{{ 'sections.featured_collection.view_all' | t }} {{ collection.title }}"
+          >
+            {{ 'sections.featured_collection.view_all' | t }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      {%- comment -%} Placeholder products when no collection is selected {%- endcomment -%}
+      <div class="product-grid">
+        {%- for i in (1..4) -%}
+          <div class="product-card">
+            <div class="product-card__image-wrapper">
+              <div class="product-card__image-placeholder" style="background:#f3f4f6;height:100%;display:flex;align-items:center;justify-content:center;">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="color:#d1d5db;">
+                  <rect x="8" y="8" width="48" height="48" rx="6" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 44l14-10 10 8 10-12 14 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="product-card__info">
+              <div class="product-card__vendor" style="height:12px;background:#e5e7eb;width:60%;border-radius:4px;margin-bottom:0.5rem;"></div>
+              <div style="height:16px;background:#e5e7eb;width:90%;border-radius:4px;margin-bottom:0.5rem;"></div>
+              <div style="height:16px;background:#e5e7eb;width:70%;border-radius:4px;margin-bottom:1rem;"></div>
+              <div style="height:20px;background:#e5e7eb;width:40%;border-radius:4px;"></div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      <p style="text-align:center;color:#6b7280;margin-top:2rem;font-size:0.875rem;">
+        {{ 'sections.featured_collection.no_collection' | t }}
+      </p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Section background",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "gray", "label": "Light gray" }
+      ],
+      "default": "gray"
+    },
+    {
+      "type": "checkbox",
+      "id": "center_heading",
+      "label": "Center heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Trending Now"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "info": "Leave blank to use collection name"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section subtitle"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show 'View all' button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

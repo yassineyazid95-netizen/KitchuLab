@@ -1,0 +1,259 @@
+{% comment %}
+  KitchuLab — Collection Template
+  Sidebar filters + product grid with pagination
+{% endcomment %}
+
+<div class="page-hero">
+  <div class="container">
+    {% render 'breadcrumb' %}
+    <h1 class="page-hero__title">{{ collection.title }}</h1>
+    {%- if collection.products_count > 0 -%}
+      <p class="page-hero__meta">{{ 'collections.general.items_count' | t: count: collection.products_count }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+
+    {%- if collection.description != blank -%}
+      <div class="collection-header">
+        <div class="collection-description">{{ collection.description }}</div>
+      </div>
+    {%- endif -%}
+
+    <div class="collection-layout">
+
+      {%- comment -%} Sidebar Filters {%- endcomment -%}
+      <aside class="collection-sidebar" id="collection-sidebar" aria-label="{{ 'collections.sidebar.title' | t }}">
+
+        {%- comment -%} Filter by Product Type {%- endcomment -%}
+        {%- if collection.all_types.size > 0 -%}
+          <div class="filter-panel open">
+            <div class="filter-panel__header" role="button" aria-expanded="true" tabindex="0">
+              <span class="filter-panel__title">{{ 'collections.filters.product_type' | t }}</span>
+              <svg class="filter-panel__chevron" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="filter-panel__body">
+              {%- for type in collection.all_types -%}
+                {%- if type != blank -%}
+                  <label class="filter-option">
+                    <input
+                      type="checkbox"
+                      name="filter.p.product_type"
+                      value="{{ type | escape }}"
+                      {%- if current_tags contains type -%}checked{%- endif -%}
+                      onchange="this.form && this.form.submit()"
+                    >
+                    <span>{{ type }}</span>
+                    <span class="filter-option__count"></span>
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Filter by Vendor {%- endcomment -%}
+        {%- if collection.all_vendors.size > 0 -%}
+          <div class="filter-panel">
+            <div class="filter-panel__header" role="button" aria-expanded="false" tabindex="0">
+              <span class="filter-panel__title">{{ 'collections.filters.brand' | t }}</span>
+              <svg class="filter-panel__chevron" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="filter-panel__body">
+              {%- for vendor in collection.all_vendors -%}
+                {%- if vendor != blank -%}
+                  <label class="filter-option">
+                    <input
+                      type="checkbox"
+                      name="filter.p.vendor"
+                      value="{{ vendor | escape }}"
+                      {%- if current_tags contains vendor -%}checked{%- endif -%}
+                      onchange="this.form && this.form.submit()"
+                    >
+                    <span>{{ vendor }}</span>
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Price Range {%- endcomment -%}
+        <div class="filter-panel">
+          <div class="filter-panel__header" role="button" aria-expanded="false" tabindex="0">
+            <span class="filter-panel__title">{{ 'collections.filters.price' | t }}</span>
+            <svg class="filter-panel__chevron" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="filter-panel__body">
+            <div class="price-range">
+              <input
+                type="number"
+                name="filter.v.price.gte"
+                placeholder="{{ 'collections.filters.min_price' | t }}"
+                min="0"
+                id="price-min"
+              >
+              <span>—</span>
+              <input
+                type="number"
+                name="filter.v.price.lte"
+                placeholder="{{ 'collections.filters.max_price' | t }}"
+                min="0"
+                id="price-max"
+              >
+            </div>
+            <button type="submit" class="btn btn--primary btn--sm" style="width:100%;margin-top:0.75rem;">
+              {{ 'collections.filters.apply' | t }}
+            </button>
+          </div>
+        </div>
+
+        {%- comment -%} Availability {%- endcomment -%}
+        <div class="filter-panel">
+          <div class="filter-panel__header" role="button" aria-expanded="false" tabindex="0">
+            <span class="filter-panel__title">{{ 'collections.filters.availability' | t }}</span>
+            <svg class="filter-panel__chevron" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="filter-panel__body">
+            <label class="filter-option">
+              <input
+                type="checkbox"
+                name="filter.v.availability"
+                value="1"
+                onchange="this.form && this.form.submit()"
+              >
+              <span>{{ 'collections.filters.in_stock' | t }}</span>
+            </label>
+          </div>
+        </div>
+
+        {%- comment -%} Active filters / Clear {%- endcomment -%}
+        {%- if current_tags.size > 0 -%}
+          <div style="margin-top:0.5rem;">
+            <a href="{{ collection.url }}" class="btn btn--secondary btn--sm btn--full">
+              {{ 'collections.filters.clear_all' | t }}
+            </a>
+          </div>
+        {%- endif -%}
+
+      </aside>
+
+      {%- comment -%} Main Content Area {%- endcomment -%}
+      <div class="collection-main">
+
+        {%- comment -%} Toolbar: count + sort {%- endcomment -%}
+        <div class="collection-toolbar">
+          <p class="collection-toolbar__count">
+            {%- if collection.products_count > 0 -%}
+              <strong>{{ collection.products_count }}</strong> {{ 'collections.general.items_count' | t: count: collection.products_count }}
+            {%- else -%}
+              {{ 'collections.general.no_items' | t }}
+            {%- endif -%}
+          </p>
+
+          <div class="collection-toolbar__sort">
+            <label class="sort-label" for="sort-select-{{ section.id }}">{{ 'collections.sorting.sort_by_label' | t }}</label>
+            <select
+              name="sort_by"
+              class="sort-select"
+              id="sort-select-{{ section.id }}"
+              aria-label="{{ 'collections.sorting.sort_by_label' | t }}"
+            >
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <option value="manual" {% if sort_by == 'manual' %}selected{% endif %}>{{ 'collections.sorting.featured' | t }}</option>
+              <option value="best-selling" {% if sort_by == 'best-selling' %}selected{% endif %}>{{ 'collections.sorting.best_selling' | t }}</option>
+              <option value="title-ascending" {% if sort_by == 'title-ascending' %}selected{% endif %}>{{ 'collections.sorting.az' | t }}</option>
+              <option value="title-descending" {% if sort_by == 'title-descending' %}selected{% endif %}>{{ 'collections.sorting.za' | t }}</option>
+              <option value="price-ascending" {% if sort_by == 'price-ascending' %}selected{% endif %}>{{ 'collections.sorting.price_ascending' | t }}</option>
+              <option value="price-descending" {% if sort_by == 'price-descending' %}selected{% endif %}>{{ 'collections.sorting.price_descending' | t }}</option>
+              <option value="created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>{{ 'collections.sorting.date_descending' | t }}</option>
+              <option value="created-ascending" {% if sort_by == 'created-ascending' %}selected{% endif %}>{{ 'collections.sorting.date_ascending' | t }}</option>
+            </select>
+          </div>
+        </div>
+
+        {%- comment -%} Products {%- endcomment -%}
+        {%- paginate collection.products by 24 -%}
+          {%- if collection.products.size > 0 -%}
+            <div class="product-grid product-grid--3col" id="product-grid">
+              {%- for product in collection.products -%}
+                {% render 'product-card', product: product %}
+              {%- endfor -%}
+            </div>
+
+            {%- comment -%} Pagination {%- endcomment -%}
+            {%- if paginate.pages > 1 -%}
+              <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+                {%- if paginate.previous -%}
+                  <a href="{{ paginate.previous.url }}" class="pagination__item" aria-label="{{ 'general.pagination.previous' | t }}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                {%- else -%}
+                  <span class="pagination__item pagination__item--disabled" aria-disabled="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+
+                {%- for part in paginate.parts -%}
+                  {%- if part.is_link -%}
+                    <a href="{{ part.url }}" class="pagination__item" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                      {{ part.title }}
+                    </a>
+                  {%- else -%}
+                    {%- if part.title == paginate.current_page -%}
+                      <span class="pagination__item pagination__item--active" aria-current="page" aria-label="{{ 'general.pagination.current_page' | t: number: part.title }}">
+                        {{ part.title }}
+                      </span>
+                    {%- else -%}
+                      <span class="pagination__item pagination__item--disabled">{{ part.title }}</span>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- if paginate.next -%}
+                  <a href="{{ paginate.next.url }}" class="pagination__item" aria-label="{{ 'general.pagination.next' | t }}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                {%- else -%}
+                  <span class="pagination__item pagination__item--disabled" aria-disabled="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+              </nav>
+            {%- endif -%}
+
+          {%- else -%}
+            <div style="text-align:center;padding:4rem 0;">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin:0 auto 1.5rem;color:#d1d5db;">
+                <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2"/>
+                <path d="M22 32h20M32 22v20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <p style="font-size:1.25rem;font-weight:700;color:#1B2A3B;margin-bottom:0.5rem;">{{ 'collections.general.no_items' | t }}</p>
+              <p style="color:#6b7280;margin-bottom:1.5rem;">{{ 'collections.general.no_items_description' | t }}</p>
+              <a href="/collections/all" class="btn btn--primary">{{ 'collections.general.continue_shopping' | t }}</a>
+            </div>
+          {%- endif -%}
+        {%- endpaginate -%}
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,342 @@
+{% comment %}
+  KitchuLab — Footer Section
+  Dark navy footer with columns, newsletter, social links, and copyright
+{% endcomment %}
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+
+    {%- comment -%} Newsletter Bar {%- endcomment -%}
+    {%- if section.settings.show_newsletter -%}
+      <div class="footer-newsletter">
+        <div class="footer-newsletter__inner">
+          <div class="footer-newsletter__text">
+            <h3 class="footer-newsletter__title">{{ section.settings.newsletter_title | default: 'Stay in the Know' | escape }}</h3>
+            <p class="footer-newsletter__subtitle">{{ section.settings.newsletter_subtitle | default: 'New products, exclusive deals & chef tips' | escape }}</p>
+          </div>
+          <form
+            method="post"
+            action="/contact#contact_form"
+            id="footer-newsletter-{{ section.id }}"
+            class="footer-newsletter__form"
+            accept-charset="UTF-8"
+            data-newsletter-form
+          >
+            <input type="hidden" name="form_type" value="customer">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <label for="newsletter-email-{{ section.id }}" class="visually-hidden">
+              {{ 'footer.newsletter.email_placeholder' | t }}
+            </label>
+            <input
+              type="email"
+              name="contact[email]"
+              id="newsletter-email-{{ section.id }}"
+              class="footer-newsletter__input"
+              placeholder="{{ 'footer.newsletter.email_placeholder' | t }}"
+              required
+              aria-required="true"
+              autocomplete="email"
+            >
+            <button type="submit" class="footer-newsletter__btn">
+              {{ 'footer.newsletter.subscribe' | t }}
+            </button>
+          </form>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Footer Top — Brand + Link Columns {%- endcomment -%}
+    <div class="footer-top">
+
+      {%- comment -%} Brand Column {%- endcomment -%}
+      <div class="footer-brand">
+        <div class="footer-logo">
+          {%- if section.settings.logo != blank -%}
+            <img
+              src="{{ section.settings.logo | img_url: '300x' }}"
+              alt="{{ shop.name }}"
+              width="160"
+              height="48"
+              loading="lazy"
+              style="max-height:48px;width:auto;opacity:0.9;"
+            >
+          {%- else -%}
+            {%- assign shop_parts = shop.name | split: ' ' -%}
+            {%- if shop_parts.size > 1 -%}
+              {{ shop_parts | first }}<span>{{ shop_parts | last }}</span>
+            {%- else -%}
+              {{ shop.name }}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.tagline != blank -%}
+          <p class="footer-tagline">{{ section.settings.tagline | escape }}</p>
+        {%- else -%}
+          <p class="footer-tagline">Professional kitchen equipment for chefs and home cooks. Quality tools that perform when it matters most.</p>
+        {%- endif -%}
+
+        {%- comment -%} Social Links {%- endcomment -%}
+        <div class="footer-social">
+          {%- if section.settings.social_facebook != blank -%}
+            <a href="{{ section.settings.social_facebook }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_instagram != blank -%}
+            <a href="{{ section.settings.social_instagram }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_twitter != blank -%}
+            <a href="{{ section.settings.social_twitter }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="X / Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_youtube != blank -%}
+            <a href="{{ section.settings.social_youtube }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.4 19.54C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_linkedin != blank -%}
+            <a href="{{ section.settings.social_linkedin }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} Column 1 {%- endcomment -%}
+      {%- if section.settings.col1_title != blank or section.settings.menu_col1 != blank -%}
+        <div class="footer-column">
+          <h4 class="footer-column__title">
+            {{ section.settings.col1_title | default: 'Shop' | escape }}
+          </h4>
+          <ul class="footer-column__list" role="list">
+            {%- if section.settings.menu_col1 != blank -%}
+              {%- for link in linklists[section.settings.menu_col1].links -%}
+                <li>
+                  <a href="{{ link.url }}" class="footer-column__link">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="/collections/kitchen-tools" class="footer-column__link">{{ 'navigation.kitchen_tools' | t }}</a></li>
+              <li><a href="/collections/kitchen-appliances" class="footer-column__link">{{ 'navigation.appliances' | t }}</a></li>
+              <li><a href="/collections/tableware" class="footer-column__link">{{ 'navigation.tableware' | t }}</a></li>
+              <li><a href="/collections/bar-equipment" class="footer-column__link">{{ 'navigation.bar_equipment' | t }}</a></li>
+              <li><a href="/collections/restaurant-equipment" class="footer-column__link">{{ 'navigation.restaurant_equipment' | t }}</a></li>
+              <li><a href="/collections/sale" class="footer-column__link">{{ 'navigation.sale' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Column 2 {%- endcomment -%}
+      {%- if section.settings.col2_title != blank or section.settings.menu_col2 != blank -%}
+        <div class="footer-column">
+          <h4 class="footer-column__title">
+            {{ section.settings.col2_title | default: 'Help' | escape }}
+          </h4>
+          <ul class="footer-column__list" role="list">
+            {%- if section.settings.menu_col2 != blank -%}
+              {%- for link in linklists[section.settings.menu_col2].links -%}
+                <li>
+                  <a href="{{ link.url }}" class="footer-column__link">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="/pages/faq" class="footer-column__link">{{ 'footer.links.faq' | t }}</a></li>
+              <li><a href="/pages/shipping-returns" class="footer-column__link">{{ 'footer.links.shipping' | t }}</a></li>
+              <li><a href="/pages/warranty" class="footer-column__link">{{ 'footer.links.warranty' | t }}</a></li>
+              <li><a href="/pages/contact" class="footer-column__link">{{ 'footer.links.contact' | t }}</a></li>
+              <li><a href="/account" class="footer-column__link">{{ 'footer.links.account' | t }}</a></li>
+              <li><a href="/pages/track-order" class="footer-column__link">{{ 'footer.links.track_order' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Column 3 {%- endcomment -%}
+      {%- if section.settings.col3_title != blank or section.settings.menu_col3 != blank -%}
+        <div class="footer-column">
+          <h4 class="footer-column__title">
+            {{ section.settings.col3_title | default: 'Company' | escape }}
+          </h4>
+          <ul class="footer-column__list" role="list">
+            {%- if section.settings.menu_col3 != blank -%}
+              {%- for link in linklists[section.settings.menu_col3].links -%}
+                <li>
+                  <a href="{{ link.url }}" class="footer-column__link">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="/pages/about" class="footer-column__link">{{ 'footer.links.about' | t }}</a></li>
+              <li><a href="/blogs/recipes" class="footer-column__link">{{ 'footer.links.blog' | t }}</a></li>
+              <li><a href="/pages/professionals" class="footer-column__link">{{ 'footer.links.professionals' | t }}</a></li>
+              <li><a href="/pages/sustainability" class="footer-column__link">{{ 'footer.links.sustainability' | t }}</a></li>
+              <li><a href="/pages/press" class="footer-column__link">{{ 'footer.links.press' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} Footer Bottom {%- endcomment -%}
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+        {%- if section.settings.copyright_text != blank -%}
+          {{ section.settings.copyright_text | escape }}
+        {%- else -%}
+          {{ 'footer.copyright.rights_reserved' | t }}
+        {%- endif -%}
+      </p>
+
+      <div class="footer-legal-links">
+        <a href="{{ shop.privacy_policy.url }}">{{ 'footer.links.privacy_policy' | t }}</a>
+        <a href="{{ shop.terms_of_service.url }}">{{ 'footer.links.terms_of_service' | t }}</a>
+        <a href="{{ shop.refund_policy.url }}">{{ 'footer.links.refund_policy' | t }}</a>
+      </div>
+
+      <div class="footer-payment" aria-label="{{ 'footer.payment.methods' | t }}">
+        {%- for type in shop.enabled_payment_types -%}
+          <img
+            src="{{ type | payment_type_img_url }}"
+            alt="{{ type }}"
+            class="footer-payment-icon"
+            loading="lazy"
+            width="38"
+            height="24"
+          >
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Brand tagline"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_twitter",
+      "label": "Twitter / X URL"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "social_linkedin",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "default": true,
+      "label": "Show newsletter signup"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title",
+      "default": "Stay in the Know"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_subtitle",
+      "label": "Newsletter subtitle",
+      "default": "New products, exclusive deals & chef tips — straight to your inbox."
+    },
+    {
+      "type": "header",
+      "content": "Column 1"
+    },
+    {
+      "type": "text",
+      "id": "col1_title",
+      "label": "Column 1 title",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_col1",
+      "label": "Column 1 menu"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column 2 title",
+      "default": "Customer Support"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_col2",
+      "label": "Column 2 menu"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Column 3 title",
+      "default": "Company"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_col3",
+      "label": "Column 3 menu"
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text (after year and store name)",
+      "default": "All rights reserved."
+    }
+  ]
+}
+{% endschema %}

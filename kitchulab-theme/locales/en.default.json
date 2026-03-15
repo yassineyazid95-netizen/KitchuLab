@@ -1,0 +1,265 @@
+{
+  "general": {
+    "meta": {
+      "home": "Home",
+      "default_description": "Professional Kitchen Equipment",
+      "tags": "Tagged with"
+    },
+    "accessibility": {
+      "close": "Close",
+      "skip_to_content": "Skip to content",
+      "open_menu": "Open menu",
+      "close_menu": "Close menu"
+    },
+    "search": {
+      "search": "Search",
+      "placeholder": "Search products...",
+      "submit": "Search",
+      "no_results": "No results for \"{{ terms }}\"",
+      "results_with_count": "{{ count }} results for \"{{ terms }}\""
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {{ number }}",
+      "current_page": "Current page: {{ number }}"
+    },
+    "breadcrumbs": {
+      "aria_label": "Breadcrumb navigation",
+      "home": "Home",
+      "all_products": "All Products"
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you were looking for does not exist. Try searching below or return to the home page.",
+      "back_to_home": "Back to Home",
+      "popular_categories": "Popular Categories"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content"
+  },
+  "layout": {
+    "navigation": {
+      "menu": "Menu",
+      "main_nav_label": "Main navigation",
+      "close_menu": "Close menu"
+    },
+    "header": {
+      "cart": "Cart",
+      "wishlist": "Wishlist",
+      "account": "Account"
+    },
+    "customer": {
+      "log_in": "Log in",
+      "log_out": "Log out",
+      "account": "My Account",
+      "create_account": "Create account"
+    }
+  },
+  "navigation": {
+    "kitchen_tools": "Kitchen Tools",
+    "cookware": "Cookware",
+    "food_prep": "Food Preparation",
+    "appliances": "Kitchen Appliances",
+    "tableware": "Tableware",
+    "bar_equipment": "Bar Equipment",
+    "restaurant_equipment": "Restaurant Equipment",
+    "sale": "Sale",
+    "pots_and_pans": "Pots & Pans",
+    "cutting_boards": "Cutting Boards",
+    "knives": "Knives",
+    "kitchen_utensils": "Kitchen Utensils",
+    "thermometers": "Thermometers",
+    "baking": "Baking",
+    "mixing_bowls": "Mixing Bowls",
+    "colanders": "Colanders & Strainers",
+    "graters_peelers": "Graters & Peelers",
+    "scales": "Kitchen Scales",
+    "timers": "Timers",
+    "blenders": "Blenders",
+    "food_processors": "Food Processors",
+    "mixers": "Stand Mixers",
+    "immersion_blenders": "Immersion Blenders",
+    "slicers": "Slicers",
+    "plates": "Plates",
+    "bowls": "Bowls",
+    "glassware": "Glassware",
+    "cutlery": "Cutlery Sets",
+    "serving_dishes": "Serving Dishes",
+    "cocktail_tools": "Cocktail Tools",
+    "ice_makers": "Ice Makers",
+    "drink_dispensers": "Drink Dispensers",
+    "wine_accessories": "Wine Accessories",
+    "chafing_dishes": "Chafing Dishes",
+    "food_warmers": "Food Warmers",
+    "display_equipment": "Display Equipment",
+    "storage_containers": "Storage Containers",
+    "view_all": "View All",
+    "shop_all": "Shop All",
+    "shop_now": "Shop now"
+  },
+  "sections": {
+    "announcement_bar": {
+      "announcement": "Announcement"
+    },
+    "category_grid": {
+      "products": "Products",
+      "shop_now": "Shop now"
+    },
+    "featured_collection": {
+      "default_title": "Featured Products",
+      "view_all": "View All",
+      "no_collection": "Select a collection in theme editor to display products here."
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Collections",
+      "items_count": "{{ count }} products",
+      "no_items": "No products found",
+      "no_items_description": "Try adjusting your filters or clearing your search.",
+      "continue_shopping": "Continue Shopping"
+    },
+    "sidebar": {
+      "title": "Filters"
+    },
+    "filters": {
+      "product_type": "Product Type",
+      "brand": "Brand",
+      "price": "Price",
+      "min_price": "Min",
+      "max_price": "Max",
+      "availability": "Availability",
+      "in_stock": "In Stock Only",
+      "apply": "Apply",
+      "clear_all": "Clear All Filters"
+    },
+    "sorting": {
+      "sort_by_label": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best Selling",
+      "az": "Alphabetically, A-Z",
+      "za": "Alphabetically, Z-A",
+      "price_ascending": "Price, low to high",
+      "price_descending": "Price, high to low",
+      "date_descending": "Date, newest first",
+      "date_ascending": "Date, oldest first"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "choose_options": "Choose Options",
+      "sold_out": "Sold Out",
+      "new": "New",
+      "save": "Save",
+      "save_percent": "Save {{ percent }}%",
+      "from_price_html": "From",
+      "sku": "SKU",
+      "quantity": "Quantity",
+      "increase_quantity": "Increase quantity",
+      "decrease_quantity": "Decrease quantity",
+      "add_to_wishlist": "Add to Wishlist",
+      "gallery": "Product image gallery",
+      "thumbnail": "Thumbnail {{ index }}",
+      "badges": "Product badges",
+      "tax_included_and_shipping_policy_html": "Tax included. Shipping calculated at checkout.",
+      "in_stock": "In Stock",
+      "no_description": "No description available.",
+      "free_shipping": "Free Shipping Over $99",
+      "easy_returns": "30-Day Returns",
+      "secure_checkout": "Secure Checkout",
+      "fast_dispatch": "Fast Dispatch",
+      "tabs": "Product details",
+      "related": {
+        "eyebrow": "You May Also Like",
+        "title": "Related Products"
+      },
+      "tabs": {
+        "description": "Description",
+        "specifications": "Specifications",
+        "delivery": "Delivery & Returns"
+      },
+      "specs": {
+        "weight": "Weight",
+        "brand": "Brand",
+        "type": "Type",
+        "availability": "Availability"
+      },
+      "delivery": {
+        "description": "We offer fast, reliable shipping across the country:",
+        "standard": "Standard Shipping: 3-5 business days",
+        "express": "Express Shipping: 1-2 business days",
+        "free_threshold": "Free Standard Shipping on all orders over $99",
+        "returns_note": "Not satisfied? Return within 30 days for a full refund. See our Returns Policy for details."
+      }
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Shopping Cart",
+      "item_count": "{{ count }} items",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "order_summary": "Order Summary",
+      "shipping": "Shipping",
+      "calculated_at_checkout": "Calculated at checkout",
+      "taxes_included": "Taxes included",
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
+      "checkout": "Proceed to Checkout",
+      "view_cart": "View Cart",
+      "note": "Order notes (optional)",
+      "note_placeholder": "Add a note to your order...",
+      "remove": "Remove",
+      "update_cart": "Update Cart",
+      "continue_shopping": "Continue Shopping",
+      "close": "Close",
+      "error": "There was an error adding to cart. Please try again.",
+      "quantity_error_html": "You can only add {{ quantity }} of this item",
+      "empty_cart_title": "Your cart is empty",
+      "empty_cart_description": "Looks like you haven't added anything yet.",
+      "start_shopping": "Shop All Products"
+    },
+    "label": {
+      "product": "Product",
+      "price": "Price",
+      "quantity": "Qty",
+      "total": "Total"
+    },
+    "trust": {
+      "secure_checkout": "Secure 256-bit SSL Encrypted Checkout",
+      "free_returns": "Free Returns within 30 Days",
+      "fast_dispatch": "Most Orders Dispatched Same Day"
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "email_placeholder": "Enter your email address",
+      "subscribe": "Subscribe"
+    },
+    "links": {
+      "faq": "FAQs",
+      "shipping": "Shipping & Returns",
+      "warranty": "Warranty",
+      "contact": "Contact Us",
+      "account": "My Account",
+      "track_order": "Track Order",
+      "about": "About Us",
+      "blog": "Blog & Recipes",
+      "professionals": "For Professionals",
+      "sustainability": "Sustainability",
+      "press": "Press",
+      "privacy_policy": "Privacy Policy",
+      "terms_of_service": "Terms of Service",
+      "refund_policy": "Refund Policy"
+    },
+    "copyright": {
+      "rights_reserved": "All rights reserved."
+    },
+    "payment": {
+      "methods": "Accepted payment methods"
+    }
+  }
+}

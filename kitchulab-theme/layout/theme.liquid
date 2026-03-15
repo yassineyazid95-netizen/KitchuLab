@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <title>
+      {%- if template == 'index' -%}
+        {{ shop.name }} — {{ shop.description | default: t('general.meta.default_description') }}
+      {%- elsif template == '404' -%}
+        {{ 'general.404.title' | t }} — {{ shop.name }}
+      {%- else -%}
+        {{ page_title }} — {{ shop.name }}
+      {%- endif -%}
+    </title>
+
+    {{ content_for_header }}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {%- endif -%}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.color_primary != blank -%}
+      <style>
+        :root {
+          --color-primary: {{ settings.color_primary }};
+          --color-accent: {{ settings.color_accent }};
+          --color-text: {{ settings.color_text }};
+          --color-background: {{ settings.color_background }};
+        }
+      </style>
+    {%- endif -%}
+  </head>
+
+  <body class="template-{{ template | replace: '.', '-' | handle }} no-js-{% if customer %}logged-in{% else %}logged-out{% endif %}">
+
+    <a class="skip-to-content-link button" href="#MainContent">
+      {{ 'accessibility.skip_to_content' | t }}
+    </a>
+
+    {%- sections 'header-group' -%}
+
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
+    <main id="MainContent" class="main-content" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+      <div class="cart-drawer__overlay"></div>
+      <div class="cart-drawer__container">
+        <div class="cart-drawer__header">
+          <h2 class="cart-drawer__title">{{ 'cart.general.title' | t }}</h2>
+          <button class="cart-drawer__close" aria-label="{{ 'cart.general.close' | t }}">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="cart-drawer__body" id="cart-drawer-body">
+          <div class="cart-drawer__loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+        <div class="cart-drawer__footer">
+          <div class="cart-drawer__subtotal">
+            <span>{{ 'cart.general.subtotal' | t }}</span>
+            <span id="cart-drawer-subtotal"></span>
+          </div>
+          <p class="cart-drawer__tax-note">{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+          <a href="/cart" class="btn btn--primary btn--full">{{ 'cart.general.view_cart' | t }}</a>
+          <a href="/checkout" class="btn btn--secondary btn--full">{{ 'cart.general.checkout' | t }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu__overlay"></div>
+      <div class="mobile-menu__container">
+        <div class="mobile-menu__header">
+          <span class="mobile-menu__logo">{{ shop.name }}</span>
+          <button class="mobile-menu__close" aria-label="{{ 'general.accessibility.close' | t }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <nav class="mobile-menu__nav">
+          <ul class="mobile-menu__list">
+            {%- for link in linklists.main-menu.links -%}
+              <li class="mobile-menu__item {% if link.links.size > 0 %}has-children{% endif %}">
+                <a href="{{ link.url }}" class="mobile-menu__link">
+                  {{ link.title }}
+                  {%- if link.links.size > 0 -%}
+                    <svg class="mobile-menu__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- endif -%}
+                </a>
+                {%- if link.links.size > 0 -%}
+                  <ul class="mobile-menu__submenu">
+                    {%- for child_link in link.links -%}
+                      <li><a href="{{ child_link.url }}" class="mobile-menu__sublink">{{ child_link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          <div class="mobile-menu__actions">
+            {%- if customer -%}
+              <a href="/account" class="mobile-menu__action-link">{{ 'layout.customer.account' | t }}</a>
+              <a href="/account/logout" class="mobile-menu__action-link">{{ 'layout.customer.log_out' | t }}</a>
+            {%- else -%}
+              <a href="/account/login" class="mobile-menu__action-link">{{ 'layout.customer.log_in' | t }}</a>
+              <a href="/account/register" class="mobile-menu__action-link">{{ 'layout.customer.create_account' | t }}</a>
+            {%- endif -%}
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div id="search-overlay" class="search-overlay" aria-hidden="true">
+      <div class="search-overlay__backdrop"></div>
+      <div class="search-overlay__container">
+        <form action="/search" method="get" class="search-overlay__form">
+          <input type="hidden" name="type" value="product">
+          <input
+            type="search"
+            name="q"
+            class="search-overlay__input"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            aria-label="{{ 'general.search.placeholder' | t }}"
+            autocomplete="off"
+          >
+          <button type="submit" class="search-overlay__submit" aria-label="{{ 'general.search.submit' | t }}">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <circle cx="9.5" cy="9.5" r="8" stroke="currentColor" stroke-width="2"/>
+              <path d="M15.5 15.5L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button type="button" class="search-overlay__close" aria-label="{{ 'general.accessibility.close' | t }}">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M17 5L5 17M5 5L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    {{ 'theme.js' | asset_url | script_tag }}
+
+    <script>
+      window.shopUrl = '{{ shop.url }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+      window.cartStrings = {
+        error: '{{ 'cart.general.error' | t | escape }}',
+        quantityError: '{{ 'cart.general.quantity_error_html' | t: quantity: '[quantity]' | escape }}'
+      };
+      window.moneyFormat = {{ shop.money_format | json }};
+    </script>
+  </body>
+</html>

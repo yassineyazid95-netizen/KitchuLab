@@ -1,0 +1,139 @@
+{
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "icon": "🔥",
+        "text": "FREE SHIPPING on orders over $99 — Professional Kitchen Equipment for Chefs & Home Cooks",
+        "background_color": "#1B2A3B",
+        "text_color": "#ffffff"
+      }
+    },
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "min_height": 620,
+        "overlay_color": "#1B2A3B",
+        "overlay_opacity": 80,
+        "overlay_direction": "105",
+        "eyebrow": "Professional Grade",
+        "heading": "Tools Built for <em>Professional Chefs</em>",
+        "heading_color": "#ffffff",
+        "subheading": "Premium kitchen utensils and equipment trusted by restaurant professionals and passionate home cooks worldwide.",
+        "subheading_color": "#ffffff",
+        "button_label": "Shop All Products",
+        "button_label_2": "Our Story"
+      }
+    },
+    "category-grid": {
+      "type": "category-grid",
+      "blocks": {
+        "category-1": {
+          "type": "category",
+          "settings": {
+            "name": "Kitchen Tools",
+            "link": "/collections/kitchen-tools",
+            "product_count": "120+",
+            "fallback_color": "#1B2A3B"
+          }
+        },
+        "category-2": {
+          "type": "category",
+          "settings": {
+            "name": "Kitchen Appliances",
+            "link": "/collections/kitchen-appliances",
+            "product_count": "85+",
+            "fallback_color": "#243447"
+          }
+        },
+        "category-3": {
+          "type": "category",
+          "settings": {
+            "name": "Tableware",
+            "link": "/collections/tableware",
+            "product_count": "200+",
+            "fallback_color": "#1a3a2a"
+          }
+        },
+        "category-4": {
+          "type": "category",
+          "settings": {
+            "name": "Bar Equipment",
+            "link": "/collections/bar-equipment",
+            "product_count": "60+",
+            "fallback_color": "#3a1a1a"
+          }
+        },
+        "category-5": {
+          "type": "category",
+          "settings": {
+            "name": "Restaurant Equipment",
+            "link": "/collections/restaurant-equipment",
+            "product_count": "150+",
+            "fallback_color": "#1B2A3B"
+          }
+        },
+        "category-6": {
+          "type": "category",
+          "settings": {
+            "name": "Baking",
+            "link": "/collections/baking",
+            "product_count": "95+",
+            "fallback_color": "#2a1a3a"
+          }
+        }
+      },
+      "block_order": ["category-1", "category-2", "category-3", "category-4", "category-5", "category-6"],
+      "settings": {
+        "background": "white",
+        "center_heading": true,
+        "eyebrow": "Browse by Category",
+        "title": "Shop by Category",
+        "subtitle": "Everything a professional kitchen needs, from starter tools to restaurant-grade equipment."
+      }
+    },
+    "featured-collection-1": {
+      "type": "featured-collection",
+      "settings": {
+        "background": "gray",
+        "center_heading": true,
+        "eyebrow": "Trending Now",
+        "subtitle": "Handpicked by our kitchen experts for quality, performance, and value.",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "featured-collection-2": {
+      "type": "featured-collection",
+      "settings": {
+        "background": "white",
+        "center_heading": true,
+        "eyebrow": "New Arrivals",
+        "subtitle": "The latest additions to our professional kitchen range.",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "show_newsletter": true,
+        "newsletter_title": "Stay in the Know",
+        "newsletter_subtitle": "New products, exclusive deals & chef tips — straight to your inbox.",
+        "col1_title": "Shop",
+        "col2_title": "Customer Support",
+        "col3_title": "Company",
+        "copyright_text": "All rights reserved."
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "hero-banner",
+    "category-grid",
+    "featured-collection-1",
+    "featured-collection-2",
+    "footer"
+  ]
+}

@@ -1,0 +1,184 @@
+{% comment %}
+  KitchuLab — Category Grid Section
+  Grid of category cards with image, name, and hover overlay
+{% endcomment %}
+
+{%- if section.blocks.size > 0 -%}
+  <section class="section {% if section.settings.background == 'gray' %}section--gray{% endif %}" aria-labelledby="category-grid-title-{{ section.id }}">
+    <div class="container">
+
+      {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+        <div class="section-header {% if section.settings.center_heading %}section-header--center{% endif %}">
+          {%- if section.settings.eyebrow != blank -%}
+            <span class="section-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="section-title" id="category-grid-title-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtitle != blank -%}
+            <p class="section-subtitle">{{ section.settings.subtitle | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="category-grid {% if section.blocks.size >= 4 %}category-grid--4col{% endif %}">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category' -%}
+            <a
+              href="{{ block.settings.link | default: '#' }}"
+              class="category-card"
+              {{ block.shopify_attributes }}
+              aria-label="{{ block.settings.name | escape }}"
+            >
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | img_url: '600x450' }}"
+                  srcset="
+                    {{ block.settings.image | img_url: '400x300' }} 400w,
+                    {{ block.settings.image | img_url: '600x450' }} 600w,
+                    {{ block.settings.image | img_url: '800x600' }} 800w
+                  "
+                  sizes="(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
+                  class="category-card__image"
+                  loading="lazy"
+                  width="600"
+                  height="450"
+                >
+              {%- else -%}
+                <div style="position:absolute;inset:0;background:linear-gradient(135deg,{{ block.settings.fallback_color | default: '#1B2A3B' }} 0%,{{ block.settings.fallback_color | default: '#243447' }} 100%);display:flex;align-items:center;justify-content:center;">
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="10" width="40" height="40" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2"/><path d="M20 30h20M30 20v20" stroke="#E87722" stroke-width="2.5" stroke-linecap="round"/></svg>
+                </div>
+              {%- endif -%}
+
+              <div class="category-card__overlay"></div>
+
+              <div class="category-card__content">
+                {%- if block.settings.product_count != blank -%}
+                  <span class="category-card__count">{{ block.settings.product_count }} {{ 'sections.category_grid.products' | t }}</span>
+                {%- endif -%}
+                <h3 class="category-card__name">{{ block.settings.name | escape }}</h3>
+                <span class="category-card__arrow" aria-hidden="true">
+                  {{ 'sections.category_grid.shop_now' | t }}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="section-action">
+          <a href="{{ section.settings.button_link | default: '/collections/all' }}" class="btn btn--secondary btn--lg">
+            {{ section.settings.button_label | escape }}
+          </a>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Category grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Section background",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "gray", "label": "Light gray" }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "checkbox",
+      "id": "center_heading",
+      "label": "Center heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Browse by Category"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section subtitle"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Category name",
+          "default": "Category Name"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Category link"
+        },
+        {
+          "type": "text",
+          "id": "product_count",
+          "label": "Product count text (optional)",
+          "placeholder": "e.g. 120+"
+        },
+        {
+          "type": "color",
+          "id": "fallback_color",
+          "label": "Fallback background color",
+          "default": "#1B2A3B"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category grid",
+      "blocks": [
+        { "type": "category", "settings": { "name": "Kitchen Tools" } },
+        { "type": "category", "settings": { "name": "Kitchen Appliances" } },
+        { "type": "category", "settings": { "name": "Tableware" } },
+        { "type": "category", "settings": { "name": "Bar Equipment" } },
+        { "type": "category", "settings": { "name": "Restaurant Equipment" } },
+        { "type": "category", "settings": { "name": "Baking" } }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

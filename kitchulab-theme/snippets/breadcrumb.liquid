@@ -1,0 +1,103 @@
+{% comment %}
+  KitchuLab — Breadcrumb Snippet
+  Usage: {% render 'breadcrumb' %}
+  Renders breadcrumb navigation for collection, product, page, and blog templates.
+{% endcomment %}
+
+<nav class="breadcrumb" aria-label="{{ 'general.breadcrumbs.aria_label' | t }}">
+  <ol class="breadcrumb__list" vocab="https://schema.org/" typeof="BreadcrumbList" role="list" style="display:flex;align-items:center;flex-wrap:wrap;gap:0.5rem;list-style:none;padding:0;margin:0;">
+
+    <li class="breadcrumb__item" property="itemListElement" typeof="ListItem">
+      <a href="/" class="breadcrumb__link" property="item" typeof="WebPage" aria-label="{{ 'general.breadcrumbs.home' | t }}">
+        <span property="name">{{ 'general.breadcrumbs.home' | t }}</span>
+      </a>
+      <meta property="position" content="1">
+      <span class="breadcrumb__separator" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </li>
+
+    {%- if template == 'collection' -%}
+      <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+        <span class="breadcrumb__current" property="name">{{ collection.title }}</span>
+        <meta property="item" content="{{ request.origin }}{{ collection.url }}">
+        <meta property="position" content="2">
+      </li>
+
+    {%- elsif template == 'product' -%}
+      {%- if collection != blank -%}
+        <li class="breadcrumb__item" property="itemListElement" typeof="ListItem">
+          <a href="{{ collection.url }}" class="breadcrumb__link" property="item" typeof="WebPage">
+            <span property="name">{{ collection.title }}</span>
+          </a>
+          <meta property="position" content="2">
+          <span class="breadcrumb__separator" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </li>
+        <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+          <span class="breadcrumb__current" property="name">{{ product.title }}</span>
+          <meta property="item" content="{{ request.origin }}{{ product.url }}">
+          <meta property="position" content="3">
+        </li>
+      {%- else -%}
+        <li class="breadcrumb__item" property="itemListElement" typeof="ListItem">
+          <a href="/collections/all" class="breadcrumb__link" property="item" typeof="WebPage">
+            <span property="name">{{ 'general.breadcrumbs.all_products' | t }}</span>
+          </a>
+          <meta property="position" content="2">
+          <span class="breadcrumb__separator" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </li>
+        <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+          <span class="breadcrumb__current" property="name">{{ product.title }}</span>
+          <meta property="item" content="{{ request.origin }}{{ product.url }}">
+          <meta property="position" content="3">
+        </li>
+      {%- endif -%}
+
+    {%- elsif template == 'page' -%}
+      <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+        <span class="breadcrumb__current" property="name">{{ page.title }}</span>
+        <meta property="item" content="{{ request.origin }}{{ page.url }}">
+        <meta property="position" content="2">
+      </li>
+
+    {%- elsif template contains 'blog' -%}
+      <li class="breadcrumb__item" property="itemListElement" typeof="ListItem">
+        <a href="{{ blog.url }}" class="breadcrumb__link" property="item" typeof="WebPage">
+          <span property="name">{{ blog.title }}</span>
+        </a>
+        <meta property="position" content="2">
+        {%- if template == 'article' -%}
+          <span class="breadcrumb__separator" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        {%- endif -%}
+      </li>
+      {%- if template == 'article' -%}
+        <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+          <span class="breadcrumb__current" property="name">{{ article.title }}</span>
+          <meta property="item" content="{{ request.origin }}{{ article.url }}">
+          <meta property="position" content="3">
+        </li>
+      {%- endif -%}
+
+    {%- elsif template == 'cart' -%}
+      <li class="breadcrumb__item" property="itemListElement" typeof="ListItem" aria-current="page">
+        <span class="breadcrumb__current" property="name">{{ 'cart.general.title' | t }}</span>
+        <meta property="position" content="2">
+      </li>
+    {%- endif -%}
+
+  </ol>
+</nav>

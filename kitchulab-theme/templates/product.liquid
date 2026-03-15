@@ -1,0 +1,394 @@
+{% comment %}
+  KitchuLab — Product Template
+  Full product page with gallery, variants, ATC, tabs, related products
+{% endcomment %}
+
+<div class="section" style="padding-top:var(--spacing-8);">
+  <div class="container">
+    {% render 'breadcrumb' %}
+
+    <div class="product-layout">
+
+      {%- comment -%} Left: Image Gallery {%- endcomment -%}
+      <div class="product-gallery">
+        <div class="product-gallery__main" id="product-gallery-main">
+          {%- if product.images.size > 0 -%}
+            <img
+              src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
+              alt="{{ product.featured_image.alt | default: product.title | escape }}"
+              class="product-gallery__main-image"
+              id="product-main-image"
+              width="800"
+              height="800"
+              loading="eager"
+              fetchpriority="high"
+            >
+          {%- else -%}
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f3f4f6;">
+              <svg width="96" height="96" viewBox="0 0 96 96" fill="none" style="color:#d1d5db;">
+                <rect x="12" y="12" width="72" height="72" rx="8" stroke="currentColor" stroke-width="2"/>
+                <circle cx="36" cy="36" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 64l20-14 16 12 16-18 20 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Thumbnails {%- endcomment -%}
+        {%- if product.images.size > 1 -%}
+          <div class="product-gallery__thumbnails" role="list" aria-label="{{ 'products.product.gallery' | t }}">
+            {%- for image in product.images -%}
+              <div
+                class="product-gallery__thumb {% if forloop.first %}active{% endif %}"
+                role="listitem"
+                data-src="{{ image | img_url: '800x800', crop: 'center' }}"
+                data-alt="{{ image.alt | default: product.title | escape }}"
+                aria-label="{{ 'products.product.thumbnail' | t: index: forloop.index }}"
+              >
+                <img
+                  src="{{ image | img_url: '160x160', crop: 'center' }}"
+                  alt="{{ image.alt | default: product.title | escape }}"
+                  loading="lazy"
+                  width="80"
+                  height="80"
+                >
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Right: Product Details {%- endcomment -%}
+      <div class="product-details">
+
+        {%- if product.vendor != blank -%}
+          <p class="product-vendor">{{ product.vendor }}</p>
+        {%- endif -%}
+
+        <h1 class="product-title" itemprop="name">{{ product.title }}</h1>
+
+        {%- if product.metafields.custom.sku != blank -%}
+          <p class="product-sku">{{ 'products.product.sku' | t }}: <span>{{ product.metafields.custom.sku }}</span></p>
+        {%- elsif product.selected_or_first_available_variant.sku != blank -%}
+          <p class="product-sku" id="product-sku">{{ 'products.product.sku' | t }}: <span>{{ product.selected_or_first_available_variant.sku }}</span></p>
+        {%- endif -%}
+
+        {%- comment -%} Price {%- endcomment -%}
+        <div class="product-price-wrapper" id="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
+          <meta itemprop="price" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
+          <link itemprop="availability" href="https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+          {%- assign compare_price = product.selected_or_first_available_variant.compare_at_price -%}
+          {%- assign current_price = product.selected_or_first_available_variant.price -%}
+
+          {%- if compare_price > current_price -%}
+            <span class="product-price product-price--sale">{{ current_price | money }}</span>
+            <span class="product-price__compare">{{ compare_price | money }}</span>
+            {%- assign save_amount = compare_price | minus: current_price -%}
+            {%- assign save_percent = save_amount | times: 100 | divided_by: compare_price -%}
+            <span class="product-price__save">{{ 'products.product.save_percent' | t: percent: save_percent }}</span>
+          {%- else -%}
+            <span class="product-price">
+              {%- if product.price_varies -%}
+                {{ 'products.product.from_price_html' | t }} {{ product.price_min | money }}
+              {%- else -%}
+                {{ current_price | money }}
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </div>
+
+        <p class="product-tax-note">{{ 'products.product.tax_included_and_shipping_policy_html' | t: link: shop.url }}</p>
+
+        <hr class="product-divider">
+
+        {%- comment -%} Product Form {%- endcomment -%}
+        {%- form 'product', product, data-product-form: '', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="ProductVariantId">
+
+          {%- comment -%} Variant Options {%- endcomment -%}
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="product-option">
+                <label class="product-option__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                  {{ option.name }}:
+                  <span id="Option-{{ section.id }}-{{ forloop.index0 }}-selected">{{ option.selected_value }}</span>
+                </label>
+                <div class="variant-buttons" role="group" aria-label="{{ option.name }}">
+                  {%- for value in option.values -%}
+                    <button
+                      type="button"
+                      class="variant-btn {% if option.selected_value == value %}selected{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-option-value="{{ value | escape }}"
+                      aria-label="{{ option.name }}: {{ value }}"
+                      {% if option.selected_value == value %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}
+                    >
+                      {{ value }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <hr class="product-divider">
+
+          {%- comment -%} Quantity {%- endcomment -%}
+          <div class="product-option">
+            <label class="product-option__label" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+            <div class="quantity-selector" role="group" aria-label="{{ 'products.product.quantity' | t }}">
+              <button
+                class="quantity-btn"
+                type="button"
+                data-action="decrease"
+                aria-label="{{ 'products.product.decrease_quantity' | t }}"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <input
+                type="number"
+                name="quantity"
+                id="Quantity-{{ section.id }}"
+                value="1"
+                min="1"
+                max="{{ product.selected_or_first_available_variant.inventory_quantity | default: 99 }}"
+                class="quantity-input"
+                aria-label="{{ 'products.product.quantity' | t }}"
+              >
+              <button
+                class="quantity-btn"
+                type="button"
+                data-action="increase"
+                aria-label="{{ 'products.product.increase_quantity' | t }}"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {%- comment -%} Submit + Wishlist {%- endcomment -%}
+          <div class="product-form__actions">
+            <button
+              type="submit"
+              name="add"
+              class="btn btn--primary btn--lg"
+              {%- unless product.available -%}disabled aria-disabled="true"{%- endunless -%}
+            >
+              {%- if product.available -%}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                {{ 'products.product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </button>
+
+            <button
+              type="button"
+              class="product-form__wishlist"
+              aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+        {%- endform -%}
+
+        {%- comment -%} Trust Badges {%- endcomment -%}
+        <div class="product-trust">
+          <div class="product-trust__item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M1 3h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="21" r="1" fill="currentColor"/><circle cx="20" cy="21" r="1" fill="currentColor"/></svg>
+            <span>{{ 'products.product.free_shipping' | t }}</span>
+          </div>
+          <div class="product-trust__item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ 'products.product.easy_returns' | t }}</span>
+          </div>
+          <div class="product-trust__item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ 'products.product.secure_checkout' | t }}</span>
+          </div>
+          <div class="product-trust__item">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ 'products.product.fast_dispatch' | t }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {%- comment -%} Product Tabs {%- endcomment -%}
+    <div class="product-tabs" role="region" aria-label="{{ 'products.product.tabs' | t }}">
+      <div class="tabs-list" role="tablist">
+        <button
+          class="tab-btn active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="tab-description"
+          id="tab-btn-description"
+        >{{ 'products.product.tabs.description' | t }}</button>
+        <button
+          class="tab-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-specifications"
+          id="tab-btn-specifications"
+        >{{ 'products.product.tabs.specifications' | t }}</button>
+        <button
+          class="tab-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-delivery"
+          id="tab-btn-delivery"
+        >{{ 'products.product.tabs.delivery' | t }}</button>
+      </div>
+
+      <div
+        class="tab-panel active"
+        id="tab-description"
+        role="tabpanel"
+        aria-labelledby="tab-btn-description"
+      >
+        <div class="rte" itemprop="description">
+          {%- if product.description != blank -%}
+            {{ product.description }}
+          {%- else -%}
+            <p>{{ 'products.product.no_description' | t }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div
+        class="tab-panel"
+        id="tab-specifications"
+        role="tabpanel"
+        aria-labelledby="tab-btn-specifications"
+        hidden
+      >
+        <table class="spec-table">
+          <tbody>
+            {%- if product.selected_or_first_available_variant.weight > 0 -%}
+              <tr>
+                <td>{{ 'products.product.specs.weight' | t }}</td>
+                <td>{{ product.selected_or_first_available_variant.weight | weight_with_unit }}</td>
+              </tr>
+            {%- endif -%}
+            {%- if product.vendor != blank -%}
+              <tr>
+                <td>{{ 'products.product.specs.brand' | t }}</td>
+                <td>{{ product.vendor }}</td>
+              </tr>
+            {%- endif -%}
+            {%- if product.type != blank -%}
+              <tr>
+                <td>{{ 'products.product.specs.type' | t }}</td>
+                <td>{{ product.type }}</td>
+              </tr>
+            {%- endif -%}
+            {%- if product.selected_or_first_available_variant.sku != blank -%}
+              <tr>
+                <td>{{ 'products.product.sku' | t }}</td>
+                <td>{{ product.selected_or_first_available_variant.sku }}</td>
+              </tr>
+            {%- endif -%}
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <tr>
+                  <td>{{ option.name }}</td>
+                  <td>{{ option.values | join: ', ' }}</td>
+                </tr>
+              {%- endfor -%}
+            {%- endunless -%}
+            <tr>
+              <td>{{ 'products.product.specs.availability' | t }}</td>
+              <td>
+                {%- if product.available -%}
+                  <span style="color:#16a34a;font-weight:600;">{{ 'products.product.in_stock' | t }}</span>
+                {%- else -%}
+                  <span style="color:#dc2626;font-weight:600;">{{ 'products.product.sold_out' | t }}</span>
+                {%- endif -%}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="tab-panel"
+        id="tab-delivery"
+        role="tabpanel"
+        aria-labelledby="tab-btn-delivery"
+        hidden
+      >
+        <p>{{ 'products.product.delivery.description' | t }}</p>
+        <ul style="margin:1rem 0;padding-left:1.5rem;color:#6b7280;font-size:0.9375rem;line-height:1.7;">
+          <li>{{ 'products.product.delivery.standard' | t }}</li>
+          <li>{{ 'products.product.delivery.express' | t }}</li>
+          <li>{{ 'products.product.delivery.free_threshold' | t }}</li>
+        </ul>
+        <p>{{ 'products.product.delivery.returns_note' | t }}</p>
+      </div>
+    </div>
+
+    {%- comment -%} Related Products {%- endcomment -%}
+    <div class="related-products" aria-labelledby="related-products-title">
+      <div class="section-header section-header--center">
+        <span class="section-eyebrow">{{ 'products.product.related.eyebrow' | t }}</span>
+        <h2 class="section-title" id="related-products-title">{{ 'products.product.related.title' | t }}</h2>
+      </div>
+
+      {%- assign related_collection = product.collections | first -%}
+      {%- if related_collection != blank -%}
+        <div class="product-grid">
+          {%- assign shown = 0 -%}
+          {%- for related_product in related_collection.products -%}
+            {%- unless related_product.id == product.id or shown >= 4 -%}
+              {% render 'product-card', product: related_product %}
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 500 | json }},
+  "url": {{ request.origin | append: product.url | json }},
+  {%- if product.featured_image -%}
+  "image": {{ product.featured_image | img_url: '800x800' | prepend: 'https:' | json }},
+  {%- endif -%}
+  "brand": {
+    "@type": "Brand",
+    "name": {{ product.vendor | json }}
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": {{ request.origin | append: product.url | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ product.selected_or_first_available_variant.price | divided_by: 100.0 | json }},
+    "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    }
+  }
+}
+</script>
