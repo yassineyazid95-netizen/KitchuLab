@@ -1,50 +1,347 @@
 {% comment %}
-  KitchuLab — 404 Page Template
+  KitchuLab — 404 Page: Luxurious kitchen full-screen experience
 {% endcomment %}
 
-<div class="section">
-  <div class="container">
-    <div class="page-404">
-      <div class="page-404__code">4<span>0</span>4</div>
-      <h1 class="page-404__title">{{ 'general.404.title' | t }}</h1>
-      <p class="page-404__text">{{ 'general.404.subtext' | t }}</p>
+<style>
+  .lux-404 {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
 
-      <form action="/search" method="get" class="page-404__search" role="search">
-        <input type="hidden" name="type" value="product">
-        <label for="search-404" class="visually-hidden">{{ 'general.search.placeholder' | t }}</label>
-        <input
-          type="search"
-          name="q"
-          id="search-404"
-          placeholder="{{ 'general.search.placeholder' | t }}"
-          autocomplete="off"
-          aria-label="{{ 'general.search.placeholder' | t }}"
-        >
-        <button type="submit" class="btn btn--primary" aria-label="{{ 'general.search.submit' | t }}">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </form>
+  .lux-404__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
 
-      <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
-        <a href="/" class="btn btn--primary">{{ 'general.404.back_to_home' | t }}</a>
-        <a href="/collections/all" class="btn btn--secondary">{{ 'collections.general.continue_shopping' | t }}</a>
-      </div>
+  .lux-404__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 
-      <div style="margin-top:3rem;">
-        <p style="font-size:0.875rem;font-weight:600;color:#1B2A3B;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.06em;">
-          {{ 'general.404.popular_categories' | t }}
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;">
-          <a href="/collections/kitchen-tools" class="btn btn--secondary btn--sm">{{ 'navigation.kitchen_tools' | t }}</a>
-          <a href="/collections/knives" class="btn btn--secondary btn--sm">{{ 'navigation.knives' | t }}</a>
-          <a href="/collections/tableware" class="btn btn--secondary btn--sm">{{ 'navigation.tableware' | t }}</a>
-          <a href="/collections/bar-equipment" class="btn btn--secondary btn--sm">{{ 'navigation.bar_equipment' | t }}</a>
-          <a href="/collections/baking" class="btn btn--secondary btn--sm">{{ 'navigation.baking' | t }}</a>
-        </div>
-      </div>
+  /* Multi-layer overlay for depth and luxury feel */
+  .lux-404__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to right,
+        rgba(10, 18, 28, 0.92) 0%,
+        rgba(10, 18, 28, 0.75) 45%,
+        rgba(10, 18, 28, 0.35) 100%
+      );
+    z-index: 1;
+  }
+
+  .lux-404__content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    padding: 4rem 3rem;
+    margin-left: 8vw;
+    animation: lux-fade-up 0.9s ease both;
+  }
+
+  @keyframes lux-fade-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .lux-404__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #E87722;
+    margin-bottom: 1.5rem;
+  }
+
+  .lux-404__tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: #E87722;
+  }
+
+  .lux-404__heading {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: #ffffff;
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .lux-404__heading em {
+    font-style: normal;
+    color: #E87722;
+  }
+
+  .lux-404__sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    margin: 0 0 2.5rem;
+    max-width: 420px;
+  }
+
+  .lux-404__divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(to right, #E87722, transparent);
+    margin-bottom: 2.5rem;
+  }
+
+  .lux-404__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-bottom: 3rem;
+  }
+
+  .lux-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .lux-btn--primary {
+    background: #E87722;
+    color: #fff;
+  }
+
+  .lux-btn--primary:hover {
+    background: #d06618;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232,119,34,0.35);
+  }
+
+  .lux-btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+
+  .lux-btn--ghost:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+  }
+
+  .lux-404__search-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 0.625rem;
+  }
+
+  .lux-404__search-form {
+    display: flex;
+    gap: 0;
+    max-width: 420px;
+  }
+
+  .lux-404__search-input {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    padding: 0.8rem 1.25rem;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .lux-404__search-input::placeholder { color: rgba(255,255,255,0.35); }
+
+  .lux-404__search-input:focus {
+    border-color: #E87722;
+    background: rgba(255,255,255,0.12);
+  }
+
+  .lux-404__search-btn {
+    background: #E87722;
+    border: 1px solid #E87722;
+    border-radius: 0 3px 3px 0;
+    color: #fff;
+    padding: 0 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+  }
+
+  .lux-404__search-btn:hover { background: #d06618; }
+
+  /* Floating stat badges (right side) */
+  .lux-404__stats {
+    position: absolute;
+    bottom: 3rem;
+    right: 5vw;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-end;
+  }
+
+  .lux-stat {
+    text-align: right;
+    animation: lux-fade-up 1s ease both;
+  }
+
+  .lux-stat:nth-child(2) { animation-delay: 0.15s; }
+  .lux-stat:nth-child(3) { animation-delay: 0.3s; }
+
+  .lux-stat__number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #E87722;
+    line-height: 1;
+  }
+
+  .lux-stat__label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.2rem;
+  }
+
+  /* Vertical rule accent */
+  .lux-404__vert-rule {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(8vw - 2rem);
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(232,119,34,0.5) 30%, rgba(232,119,34,0.5) 70%, transparent);
+    z-index: 2;
+  }
+
+  @media (max-width: 768px) {
+    .lux-404__content {
+      margin-left: 0;
+      padding: 3rem 1.5rem;
+      max-width: 100%;
+    }
+
+    .lux-404__overlay {
+      background: rgba(10, 18, 28, 0.82);
+    }
+
+    .lux-404__stats { display: none; }
+    .lux-404__vert-rule { display: none; }
+  }
+</style>
+
+<div class="lux-404" role="main">
+  <!-- Background kitchen photo -->
+  <div class="lux-404__bg" aria-hidden="true">
+    <img
+      src="{{ 'luxury-kitchen.jpg' | asset_url }}"
+      alt=""
+      width="1920"
+      height="1080"
+      loading="eager"
+      fetchpriority="high"
+    >
+  </div>
+
+  <!-- Dark overlay -->
+  <div class="lux-404__overlay" aria-hidden="true"></div>
+
+  <!-- Left vertical accent rule -->
+  <div class="lux-404__vert-rule" aria-hidden="true"></div>
+
+  <!-- Main content -->
+  <div class="lux-404__content">
+    <span class="lux-404__tag">KitchuLab Kitchen</span>
+
+    <h1 class="lux-404__heading">
+      Lost in the<br><em>Kitchen?</em>
+    </h1>
+
+    <div class="lux-404__divider"></div>
+
+    <p class="lux-404__sub">
+      The page you're looking for has moved or no longer exists.
+      Let us guide you back to our world of professional kitchen tools.
+    </p>
+
+    <div class="lux-404__actions">
+      <a href="/" class="lux-btn lux-btn--primary">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 1L1 8l7 7M1 8h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to Home
+      </a>
+      <a href="/collections/all" class="lux-btn lux-btn--ghost">
+        Browse All Products
+      </a>
+    </div>
+
+    <span class="lux-404__search-label">Or search for a product</span>
+    <form action="/search" method="get" class="lux-404__search-form" role="search">
+      <input type="hidden" name="type" value="product">
+      <input
+        type="search"
+        name="q"
+        id="search-404"
+        placeholder="e.g. chef knife, wok, thermometer…"
+        autocomplete="off"
+        class="lux-404__search-input"
+        aria-label="Search products"
+      >
+      <button type="submit" class="lux-404__search-btn" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- Floating stats (decorative, right side) -->
+  <div class="lux-404__stats" aria-hidden="true">
+    <div class="lux-stat">
+      <div class="lux-stat__number">2000+</div>
+      <div class="lux-stat__label">Products</div>
+    </div>
+    <div class="lux-stat">
+      <div class="lux-stat__number">50+</div>
+      <div class="lux-stat__label">Categories</div>
+    </div>
+    <div class="lux-stat">
+      <div class="lux-stat__number">Pro</div>
+      <div class="lux-stat__label">Chef Grade</div>
     </div>
   </div>
 </div>
