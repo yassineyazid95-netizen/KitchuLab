@@ -866,6 +866,23 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+/* Portrait variant — taller cards for kitchen utensil imagery */
+.category-card--portrait {
+  aspect-ratio: 3/4;
+}
+
+.category-grid--portrait {
+  align-items: start;
+}
+
+.category-grid--portrait .category-card__name {
+  font-size: var(--font-size-xl);
+}
+
+.category-grid--portrait .category-card__content {
+  padding: var(--spacing-6) var(--spacing-6);
+}
+
 .category-card__image {
   position: absolute;
   inset: 0;

@@ -27,17 +27,18 @@
       >
     </div>
   {%- else -%}
-    <div class="hero-banner__media" style="background: linear-gradient(135deg, #1B2A3B 0%, #243447 50%, #1B2A3B 100%);">
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:5%;">
-        <svg width="380" height="380" viewBox="0 0 380 380" fill="none" opacity="0.06">
-          <circle cx="190" cy="190" r="180" stroke="#E87722" stroke-width="4"/>
-          <circle cx="190" cy="190" r="140" stroke="#E87722" stroke-width="2"/>
-          <path d="M130 150 L190 90 L250 150 L250 250 L130 250 Z" stroke="white" stroke-width="3" fill="none"/>
-          <path d="M155 190 L225 190" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
-          <path d="M155 210 L205 210" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
-          <path d="M155 170 L215 170" stroke="#E87722" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </div>
+    <div class="hero-banner__media">
+      <img
+        src="{{ 'hero-banner.jpg' | asset_url }}"
+        srcset="{{ 'hero-banner.jpg' | asset_url }} 1920w"
+        sizes="100vw"
+        alt="Professional kitchen utensils and tools"
+        loading="eager"
+        fetchpriority="high"
+        width="1920"
+        height="900"
+        style="width:100%;height:100%;object-fit:cover;object-position:center;"
+      >
     </div>
   {%- endif -%}
 

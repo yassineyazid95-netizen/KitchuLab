@@ -21,34 +21,43 @@
         </div>
       {%- endif -%}
 
-      <div class="category-grid {% if section.blocks.size >= 4 %}category-grid--4col{% endif %}">
+      {%- assign portrait_images = 'category-knives.jpg,category-pots.jpg,category-utensils.jpg,category-cutting.jpg,category-appliances.jpg,category-baking.jpg' | split: ',' -%}
+
+      <div class="category-grid category-grid--portrait {% if section.blocks.size >= 4 %}category-grid--4col{% endif %}">
         {%- for block in section.blocks -%}
           {%- if block.type == 'category' -%}
+            {%- assign img_index = forloop.index0 | modulo: 6 -%}
+            {%- assign fallback_asset = portrait_images[img_index] -%}
             <a
               href="{{ block.settings.link | default: '#' }}"
-              class="category-card"
+              class="category-card category-card--portrait"
               {{ block.shopify_attributes }}
               aria-label="{{ block.settings.name | escape }}"
             >
               {%- if block.settings.image != blank -%}
                 <img
-                  src="{{ block.settings.image | img_url: '600x450' }}"
+                  src="{{ block.settings.image | img_url: '600x800' }}"
                   srcset="
-                    {{ block.settings.image | img_url: '400x300' }} 400w,
-                    {{ block.settings.image | img_url: '600x450' }} 600w,
-                    {{ block.settings.image | img_url: '800x600' }} 800w
+                    {{ block.settings.image | img_url: '400x533' }} 400w,
+                    {{ block.settings.image | img_url: '600x800' }} 600w,
+                    {{ block.settings.image | img_url: '800x1067' }} 800w
                   "
                   sizes="(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
                   class="category-card__image"
                   loading="lazy"
                   width="600"
-                  height="450"
+                  height="800"
                 >
               {%- else -%}
-                <div style="position:absolute;inset:0;background:linear-gradient(135deg,{{ block.settings.fallback_color | default: '#1B2A3B' }} 0%,{{ block.settings.fallback_color | default: '#243447' }} 100%);display:flex;align-items:center;justify-content:center;">
-                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="10" width="40" height="40" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2"/><path d="M20 30h20M30 20v20" stroke="#E87722" stroke-width="2.5" stroke-linecap="round"/></svg>
-                </div>
+                <img
+                  src="{{ fallback_asset | asset_url }}"
+                  alt="{{ block.settings.name | escape }}"
+                  class="category-card__image"
+                  loading="lazy"
+                  width="600"
+                  height="800"
+                >
               {%- endif -%}
 
               <div class="category-card__overlay"></div>
